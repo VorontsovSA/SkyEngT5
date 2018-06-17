@@ -2,33 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import {ImageItem} from '../../Models/ImageItem';
 import {ajax} from 'rxjs/observable/dom/ajax';
 
+const LIMIT = 9;
+
 @Component({
   selector: 'app-image-collection',
   templateUrl: './image-collection.component.html',
   styleUrls: ['./image-collection.component.css']
 })
 export class ImageCollectionComponent implements OnInit {
-  limit = 9;
-  start = 0;
+  start = 4988;
   isLoading = false;
-  loadedImages: ImageItem[];
+  showButton = true;
+  loadedImages: ImageItem[] = [];
 
   constructor() { }
 
   ngOnInit() {
-    this.loadedImages = [];
     this.loadMore();
   }
 
   loadMore() {
     this.isLoading = true;
-    ajax('https://jsonplaceholder.typicode.com/photos?_start=' + this.start + '&_limit=' + this.limit)
+    ajax('https://jsonplaceholder.typicode.com/photos?_start=' + this.start + '&_limit=' + LIMIT)
       .subscribe(data => this.handleData(data));
   }
 
   handleData(data) {
+    if (data.response.length < LIMIT) {
+      this.showButton = false;
+    }
     for (let row of data.response) {
-      console.log(this.loadedImages);
       this.loadedImages.push({
         albumId: row.albumId,
         id: row.id,
@@ -37,7 +40,7 @@ export class ImageCollectionComponent implements OnInit {
         thumbnailUrl: row.thumbnailUrl
       });
     }
-    this.start += 9;
+    this.start += LIMIT;
     this.isLoading = false;
   }
 }

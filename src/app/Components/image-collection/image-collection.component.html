@@ -2,5 +2,5 @@
   <div *ngFor="let image of loadedImages; index as i">
     <app-image-item [image]="image"></app-image-item>
   </div>
-  <button class="btn" (click)="loadMore()" [disabled]="isLoading">Load more</button>
+  <button *ngIf="showButton" class="btn" (click)="loadMore()" [disabled]="isLoading">Load more</button>
 </div>

@@ -15,5 +15,6 @@
 }
 
 .container button {
+    clear: both;
     margin-top: 20px;
 }
